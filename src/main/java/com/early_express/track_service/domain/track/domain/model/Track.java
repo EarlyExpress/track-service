@@ -187,7 +187,7 @@ public class Track {
         int totalSegments = hubSegmentDeliveryIds.size();
 
         return Track.builder()
-                .id(TrackId.generate())
+                .id(null)
                 .orderId(orderId)
                 .orderNumber(orderNumber)
                 .originHubId(originHubId)
@@ -229,7 +229,7 @@ public class Track {
         validateNotBlank(lastMileDeliveryId, "최종 배송 ID");
 
         return Track.builder()
-                .id(TrackId.generate())
+                .id(null)
                 .orderId(orderId)
                 .orderNumber(orderNumber)
                 .originHubId(hubId)
@@ -322,7 +322,7 @@ public class Track {
         this.startedAt = LocalDateTime.now();
 
         log.info("허브 배송 시작 - trackId: {}, orderId: {}",
-                this.id.getValue(), this.orderId);
+                this.getIdValue(), this.orderId);
     }
 
     /**
@@ -346,7 +346,7 @@ public class Track {
         }
 
         log.info("허브 구간 출발 - trackId: {}, segment: {}/{}, from: {} → to: {}, deliveryId: {}",
-                this.id.getValue(),
+                this.getIdValue(),
                 segmentIndex + 1,
                 this.hubSegmentInfo.getTotalSegments(),
                 fromHubId,
@@ -371,10 +371,10 @@ public class Track {
         if (this.hubSegmentInfo.isAllSegmentsCompleted()) {
             this.currentPhase = TrackPhase.HUB_DELIVERY_COMPLETED;
             log.info("모든 허브 구간 완료 - trackId: {}, totalSegments: {}",
-                    this.id.getValue(), this.hubSegmentInfo.getTotalSegments());
+                    this.getIdValue(), this.hubSegmentInfo.getTotalSegments());
         } else {
             log.info("허브 구간 도착 - trackId: {}, segment: {}/{}, completed: {}",
-                    this.id.getValue(),
+                    this.getIdValue(),
                     segmentIndex + 1,
                     this.hubSegmentInfo.getTotalSegments(),
                     this.hubSegmentInfo.getCompletedSegments());
@@ -398,7 +398,7 @@ public class Track {
         }
 
         log.info("최종 배송 픽업 - trackId: {}, lastMileDeliveryId: {}",
-                this.id.getValue(), this.deliveryIds.getLastMileDeliveryId());
+                this.getIdValue(), this.deliveryIds.getLastMileDeliveryId());
     }
 
     /**
@@ -417,7 +417,7 @@ public class Track {
 
         this.currentPhase = TrackPhase.LAST_MILE_IN_TRANSIT;
 
-        log.info("최종 배송 출발 - trackId: {}", this.id.getValue());
+        log.info("최종 배송 출발 - trackId: {}", this.getIdValue());
     }
 
     /**
@@ -432,7 +432,7 @@ public class Track {
         this.actualDeliveryTime = LocalDateTime.now();
 
         log.info("배송 완료 - trackId: {}, orderId: {}, 소요시간: {}분",
-                this.id.getValue(),
+                this.getIdValue(),
                 this.orderId,
                 calculateDurationMinutes());
     }
@@ -446,7 +446,7 @@ public class Track {
         this.completedAt = LocalDateTime.now();
 
         log.info("배송 실패 - trackId: {}, orderId: {}",
-                this.id.getValue(), this.orderId);
+                this.getIdValue(), this.orderId);
     }
 
     // ===== Soft Delete =====
@@ -462,7 +462,7 @@ public class Track {
         this.deletedBy = deletedBy;
 
         log.info("Track 삭제 - trackId: {}, deletedBy: {}",
-                this.id.getValue(), deletedBy);
+                this.getIdValue(), deletedBy);
     }
 
     /**
@@ -473,7 +473,7 @@ public class Track {
         this.deletedAt = null;
         this.deletedBy = null;
 
-        log.info("Track 복구 - trackId: {}", this.id.getValue());
+        log.info("Track 복구 - trackId: {}", this.getIdValue());
     }
 
     // ===== 검증 메서드 =====
