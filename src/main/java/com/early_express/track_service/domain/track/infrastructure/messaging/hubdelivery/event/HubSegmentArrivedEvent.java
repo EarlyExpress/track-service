@@ -1,11 +1,12 @@
 package com.early_express.track_service.domain.track.infrastructure.messaging.hubdelivery.event;
 
+import com.early_express.track_service.global.infrastructure.event.base.BaseEvent;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -14,18 +15,11 @@ import java.time.LocalDateTime;
  * Hub Delivery Service → Track Service
  */
 @Getter
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class HubSegmentArrivedEvent {
-
-    private String eventId;
-    private String eventType;
-    private String source;
-
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime timestamp;
+public class HubSegmentArrivedEvent extends BaseEvent {
 
     private String orderId;
     private String hubDeliveryId;
