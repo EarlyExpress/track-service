@@ -1,4 +1,4 @@
-name: Build Config Server Image
+name: Build track Server Image
 
 on:
   push:
