@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: earlyexpress/track-server
+  IMAGE_NAME: earlyexpress/track-service
   VERSION: latest
 
 jobs:
