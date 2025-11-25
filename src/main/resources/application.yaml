@@ -64,13 +64,11 @@ spring:
       concurrency: 3  # 동시 처리 리스너 수
     # ----- Topic 설정 -----
     topic:
-      # Order Service가 발행하는 토픽
-      order-events: ${KAFKA_TOPIC_ORDER_EVENTS:order-service-events}
-      order-payment-verified: ${KAFKA_TOPIC_ORDER_PAYMENT_VERIFIED:order-payment-verified}
-      # Payment Service가 발행하는 토픽 (Order Service가 구독)
-      payment-events: ${KAFKA_TOPIC_PAYMENT_EVENTS:payment-events}
-      notification-requested-event: notification-requested-event
-      tracking-start-requested-event: tracking-start-requested-event
+      last-mile-departed: last-mile-departed
+      last-mile-completed: last-mile-completed
+      hub-segment-departed: hub-segment-departed
+      hub-segment-arrived: hub-segment-arrived
+      tracking-start-requested: tracking-start-requested
 
 # ===== 서버 포트 설정 =====
 server:
