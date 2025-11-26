@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Track JPA Entity
@@ -37,6 +36,9 @@ public class TrackEntity extends BaseEntity {
     @Id
     @Column(name = "id", length = 36)
     private String id;
+
+    @Column(name = "hub_delivery_id", length = 36)
+    private String hubDeliveryId;
 
     @Column(name = "order_id", nullable = false, length = 36)
     private String orderId;
@@ -101,7 +103,7 @@ public class TrackEntity extends BaseEntity {
     private LocalDateTime completedAt;
 
     @Builder
-    private TrackEntity(String id, String orderId, String orderNumber,
+    private TrackEntity(String id, String hubDeliveryId, String orderId, String orderNumber,
                         String originHubId, String destinationHubId,
                         String hubSegmentDeliveryIdsJson, String lastMileDeliveryId,
                         Integer totalHubSegments, Integer currentSegmentIndex,
@@ -112,6 +114,7 @@ public class TrackEntity extends BaseEntity {
                         LocalDateTime estimatedDeliveryTime, LocalDateTime actualDeliveryTime,
                         LocalDateTime startedAt, LocalDateTime completedAt) {
         this.id = id;
+        this.hubDeliveryId = hubDeliveryId;
         this.orderId = orderId;
         this.orderNumber = orderNumber;
         this.originHubId = originHubId;
@@ -148,6 +151,7 @@ public class TrackEntity extends BaseEntity {
 
         return TrackEntity.builder()
                 .id(entityId)
+                .hubDeliveryId(track.getHubDeliveryId())
                 .orderId(track.getOrderId())
                 .orderNumber(track.getOrderNumber())
                 .originHubId(track.getOriginHubId())
@@ -191,6 +195,7 @@ public class TrackEntity extends BaseEntity {
 
         return Track.reconstitute(
                 TrackId.of(this.id),
+                this.hubDeliveryId,
                 this.orderId,
                 this.orderNumber,
                 this.originHubId,
@@ -225,6 +230,7 @@ public class TrackEntity extends BaseEntity {
         }
 
         // 불변 필드 제외, 가변 필드만 업데이트
+        // hubDeliveryId는 불변 필드이므로 업데이트하지 않음
         this.hubSegmentDeliveryIdsJson = toJson(track.getDeliveryIds().getHubSegmentDeliveryIds());
         this.totalHubSegments = track.getHubSegmentInfo().getTotalSegments();
         this.currentSegmentIndex = track.getHubSegmentInfo().getCurrentSegmentIndex();
