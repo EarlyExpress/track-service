@@ -20,7 +20,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("track Server API Documentation")
-                        .description("Early Express Default Server REST API")
+                        .description("Early Express Track Server REST API")
                         .version("1.0.0")
                         .contact(new Contact()
                                 .name("Early Express Team")

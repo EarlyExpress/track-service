@@ -10,7 +10,7 @@ spring:
 
   # ===== 프로파일 설정 =====
   profiles:
-    active: ${APP_PROFILE:local}  # 활성 프로파일 (local, dev, staging, prod)
+    active: ${APP_PROFILE:dev}  # 활성 프로파일 (local, dev, staging, prod)
 
   # ===== Config Server 연결 설정 =====
   # Eureka를 통해 Config Server를 자동으로 찾아 설정을 가져옴
@@ -72,7 +72,7 @@ spring:
 
 # ===== 서버 포트 설정 =====
 server:
-  port: ${APP_PORT}  # 서비스 포트 (환경변수로 오버라이드 가능)
+  port: ${APP_PORT:4013}  # 서비스 포트 (환경변수로 오버라이드 가능)
   shutdown: graceful  # 종료 (진행중인 요청 완료 후 종료)
 
 # ===== Eureka Client 설정 =====
@@ -108,21 +108,13 @@ springdoc:
     oauth2-redirect-url: /swagger-ui/oauth2-redirect.html
   # 실제 서버 URL 설정 (프록시 URL)
   server:
-    url: http://localhost:4000
+    url: http://192.168.0.42:4014
 
 client:
-  inventory-service:
-    url: ${INVENTORY_SERVICE_URL}
-  payment-service:
-    url: ${PAYMENT_SERVICE_URL}
-  hub-service:
-    url: ${HUB_SERVICE_URL}
   hub-delivery-service:
-    url: hub-delivery-service
-  ai-service:
-    url: ai-service
-  last-mile-service:
-    url: last-mile-service
+    url: ${HUB_DELIVERY_SERVICE_URL:hub-delivery-service}
+  last-mile-delivery-service:
+    url: ${LAST_MILE_DELIVERY_SERVICE_URL:last-mile-delivery-service}
 
 # ========================================
 # 서비스별 커스터마이징이 필요한 설정 예시
