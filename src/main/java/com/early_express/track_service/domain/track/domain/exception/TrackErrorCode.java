@@ -20,6 +20,7 @@ public enum TrackErrorCode implements ErrorCode {
     INVALID_STATUS_TRANSITION("TRACK_101", "유효하지 않은 상태 전이입니다.", 400),
     TRACK_ALREADY_COMPLETED("TRACK_102", "이미 완료된 추적입니다.", 400),
     TRACK_ALREADY_FAILED("TRACK_103", "이미 실패한 추적입니다.", 400),
+    INVALID_TRACK_STATE("TRACK_104", "유효하지 않은 추적 상태입니다.", 400),
 
     // === 허브 구간 관련 (400) ===
     INVALID_SEGMENT_INDEX("TRACK_110", "유효하지 않은 구간 순서입니다.", 400),
@@ -38,7 +39,20 @@ public enum TrackErrorCode implements ErrorCode {
     INVALID_ROUTING_HUB_DATA("TRACK_203", "유효하지 않은 라우팅 허브 데이터입니다.", 400),
 
     // === 중복 관련 (409) ===
-    TRACK_ALREADY_EXISTS("TRACK_300", "이미 해당 주문의 추적 정보가 존재합니다.", 409);
+    TRACK_ALREADY_EXISTS("TRACK_300", "이미 해당 주문의 추적 정보가 존재합니다.", 409),
+
+    // 외부 서비스 - HubDelivery (4xx)
+    HUB_DELIVERY_NOT_FOUND("TRACK_301", "허브 배송 정보를 찾을 수 없습니다.", 404),
+    HUB_DELIVERY_DRIVER_ASSIGN_FAILED("TRACK_302", "허브 배송 드라이버 배정에 실패했습니다.", 400),
+
+    // 외부 서비스 - LastMileDelivery (4xx)
+    LAST_MILE_DELIVERY_NOT_FOUND("TRACK_401", "최종 배송 정보를 찾을 수 없습니다.", 404),
+    LAST_MILE_DRIVER_ASSIGN_FAILED("TRACK_402", "최종 배송 드라이버 배정에 실패했습니다.", 400),
+
+    // 외부 서비스 연결 (5xx)
+    EXTERNAL_SERVICE_ERROR("TRACK_501", "외부 서비스 내부 오류가 발생했습니다.", 500),
+    EXTERNAL_SERVICE_UNAVAILABLE("TRACK_502", "외부 서비스를 사용할 수 없습니다.", 503)
+    ;
 
     private final String code;
     private final String message;
