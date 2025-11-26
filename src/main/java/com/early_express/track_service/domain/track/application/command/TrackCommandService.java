@@ -47,6 +47,7 @@ public class TrackCommandService {
                     command.getOrderNumber(),
                     command.getOriginHubId(),
                     command.getDestinationHubId(),
+                    command.getHubDeliveryId(),
                     command.getHubSegmentDeliveryIds(),
                     command.getLastMileDeliveryId(),
                     command.getEstimatedDeliveryTime(),

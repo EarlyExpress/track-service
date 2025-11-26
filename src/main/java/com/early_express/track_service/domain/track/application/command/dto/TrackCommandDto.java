@@ -21,6 +21,7 @@ public class TrackCommandDto {
         private String orderNumber;
         private String originHubId;
         private String destinationHubId;
+        private String hubDeliveryId;
         private List<String> hubSegmentDeliveryIds;
         private String lastMileDeliveryId;
         private Boolean requiresHubDelivery;
