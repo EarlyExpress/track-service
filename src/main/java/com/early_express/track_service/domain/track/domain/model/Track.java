@@ -30,6 +30,12 @@ public class Track {
      */
     private TrackId id;
 
+    /**
+     * 허브배송 ID (HubDelivery Service)
+     * - 드라이버 배정 요청 시 사용
+     */
+    private String hubDeliveryId;
+
     // ===== 주문 정보 =====
 
     /**
@@ -120,7 +126,7 @@ public class Track {
     private boolean isDeleted;
 
     @Builder
-    private Track(TrackId id, String orderId, String orderNumber,
+    private Track(TrackId id, String hubDeliveryId, String orderId, String orderNumber,
                   String originHubId, String destinationHubId,
                   DeliveryIds deliveryIds, HubSegmentInfo hubSegmentInfo,
                   Boolean requiresHubDelivery, TrackStatus status,
@@ -130,6 +136,7 @@ public class Track {
                   String createdBy, LocalDateTime updatedAt, String updatedBy,
                   LocalDateTime deletedAt, String deletedBy, boolean isDeleted) {
         this.id = id;
+        this.hubDeliveryId = hubDeliveryId;
         this.orderId = orderId;
         this.orderNumber = orderNumber;
         this.originHubId = originHubId;
@@ -161,6 +168,7 @@ public class Track {
      * @param orderNumber            주문 번호
      * @param originHubId            출발 허브 ID
      * @param destinationHubId       도착 허브 ID
+     * @param hubDeliveryId          허브 배송 ID (드라이버 배정 요청용)
      * @param hubSegmentDeliveryIds  허브 구간별 배송 ID 목록 (순서대로)
      * @param lastMileDeliveryId     최종 배송 ID
      * @param estimatedDeliveryTime  예상 배송 완료 시간
@@ -172,6 +180,7 @@ public class Track {
             String orderNumber,
             String originHubId,
             String destinationHubId,
+            String hubDeliveryId,
             List<String> hubSegmentDeliveryIds,
             String lastMileDeliveryId,
             LocalDateTime estimatedDeliveryTime,
@@ -181,6 +190,7 @@ public class Track {
         validateNotBlank(orderNumber, "주문 번호");
         validateNotBlank(originHubId, "출발 허브 ID");
         validateNotBlank(destinationHubId, "도착 허브 ID");
+        validateNotBlank(hubDeliveryId, "허브 배송 ID");
         validateNotBlank(lastMileDeliveryId, "최종 배송 ID");
         validateNotEmpty(hubSegmentDeliveryIds, "허브 구간 배송 ID 목록");
 
@@ -188,6 +198,7 @@ public class Track {
 
         return Track.builder()
                 .id(null)
+                .hubDeliveryId(hubDeliveryId)
                 .orderId(orderId)
                 .orderNumber(orderNumber)
                 .originHubId(originHubId)
@@ -230,6 +241,7 @@ public class Track {
 
         return Track.builder()
                 .id(null)
+                .hubDeliveryId(null)  // 허브 배송 없음
                 .orderId(orderId)
                 .orderNumber(orderNumber)
                 .originHubId(hubId)
@@ -251,6 +263,7 @@ public class Track {
      */
     public static Track reconstitute(
             TrackId id,
+            String hubDeliveryId,
             String orderId,
             String orderNumber,
             String originHubId,
@@ -274,6 +287,7 @@ public class Track {
 
         return Track.builder()
                 .id(id)
+                .hubDeliveryId(hubDeliveryId)
                 .orderId(orderId)
                 .orderNumber(orderNumber)
                 .originHubId(originHubId)
@@ -543,6 +557,13 @@ public class Track {
      */
     public String getIdValue() {
         return this.id != null ? this.id.getValue() : null;
+    }
+
+    /**
+     * 허브 배송 필요 여부 (null-safe)
+     */
+    public boolean isRequiresHubDelivery() {
+        return Boolean.TRUE.equals(this.requiresHubDelivery);
     }
 
     /**
