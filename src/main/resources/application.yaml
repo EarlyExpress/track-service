@@ -70,6 +70,7 @@ spring:
       hub-segment-arrived: hub-segment-arrived
       tracking-start-requested: tracking-start-requested
 
+
 # ===== 서버 포트 설정 =====
 server:
   port: ${APP_PORT:4013}  # 서비스 포트 (환경변수로 오버라이드 가능)

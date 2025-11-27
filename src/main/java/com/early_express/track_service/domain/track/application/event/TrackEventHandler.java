@@ -55,11 +55,21 @@ public class TrackEventHandler {
      * 1. Track 생성
      * 2. 첫 번째 구간 드라이버 배정 요청
      */
-    @Transactional
     public void handleTrackingStartRequested(TrackingStartRequestedEvent event) {
         log.info("TrackingStartRequested 처리 시작 - orderId: {}", event.getOrderId());
 
-        // 1. Track 생성
+        // 1. Track 생성 (별도 트랜잭션)
+        Track track = createTrack(event);
+
+        log.info("Track 생성 완료 - trackId: {}, orderId: {}",
+                track.getIdValue(), track.getOrderId());
+
+        // 2. 배송 추적 시작 (Track이 DB에 커밋된 후)
+        startTracking(track);
+    }
+
+    @Transactional
+    public Track createTrack(TrackingStartRequestedEvent event) {
         List<String> hubSegmentDeliveryIds = parseHubSegmentIds(
                 event.getRoutingHub(),
                 event.getHubDeliveryId()
@@ -78,13 +88,7 @@ public class TrackEventHandler {
                 .createdBy("SYSTEM")
                 .build();
 
-        Track track = trackCommandService.createTrack(command);
-
-        log.info("Track 생성 완료 - trackId: {}, orderId: {}",
-                track.getIdValue(), track.getOrderId());
-
-        // 2. 배송 추적 시작 (첫 번째 구간 드라이버 배정)
-        startTracking(track);
+        return trackCommandService.createTrack(command);
     }
 
     // ==================== Hub Delivery 이벤트 ====================
