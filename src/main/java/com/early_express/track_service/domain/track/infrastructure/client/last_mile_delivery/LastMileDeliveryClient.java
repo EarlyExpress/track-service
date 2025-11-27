@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
  */
 @FeignClient(
         name = "last-mile-delivery-service",
-        url = "${client.last-mile-delivery-service.url}",
+//        url = "${client.last-mile-delivery-service.url}",
         configuration = LastMileDeliveryClientConfig.class
 )
 public interface LastMileDeliveryClient {

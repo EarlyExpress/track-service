@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
  */
 @FeignClient(
         name = "hub-delivery-service",
-        url = "${client.hub-delivery-service.url}",
+//        url = "${client.hub-delivery-service.url}",
         configuration = HubDeliveryClientConfig.class
 )
 public interface HubDeliveryClient {
