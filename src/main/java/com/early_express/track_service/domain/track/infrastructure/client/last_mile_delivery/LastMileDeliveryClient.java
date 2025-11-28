@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
  * 최종 배송 서비스와의 동기 통신
  */
 @FeignClient(
-        name = "last-mile-delivery-service",
+        name = "delivery-service",
 //        url = "${client.last-mile-delivery-service.url}",
         configuration = LastMileDeliveryClientConfig.class
 )

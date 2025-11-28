@@ -224,23 +224,40 @@ public class TrackEventHandler {
      * @param track Track
      * @param completedSegmentIndex 완료된 구간 인덱스
      */
+//    private void handleHubSegmentCompleted(Track track, int completedSegmentIndex) {
+//        int nextSegmentIndex = completedSegmentIndex + 1;
+//        int totalHubSegments = track.getTotalHubSegments();
+//
+//        log.info("허브 구간 완료 후 다음 단계 결정 - trackId: {}, completedSegment: {}/{}",
+//                track.getIdValue(), completedSegmentIndex + 1, totalHubSegments);
+//
+//        if (nextSegmentIndex < totalHubSegments) {
+//            // 다음 허브 구간 존재 → 다음 구간 드라이버 배정
+//            log.info("다음 허브 구간 시작 - trackId: {}, nextSegment: {}/{}",
+//                    track.getIdValue(), nextSegmentIndex + 1, totalHubSegments);
+//            requestHubSegmentDriverAssignment(track, nextSegmentIndex);
+//        } else {
+//            // 모든 허브 구간 완료 → 최종 배송 시작
+//            log.info("모든 허브 구간 완료, 최종 배송 시작 - trackId: {}",
+//                    track.getIdValue());
+//            requestLastMileDriverAssignment(track);
+//        }
+//    }
     private void handleHubSegmentCompleted(Track track, int completedSegmentIndex) {
-        int nextSegmentIndex = completedSegmentIndex + 1;
+        int completedCount = track.getCompletedHubSegments();  // DB의 실제 완료 수
         int totalHubSegments = track.getTotalHubSegments();
 
-        log.info("허브 구간 완료 후 다음 단계 결정 - trackId: {}, completedSegment: {}/{}",
-                track.getIdValue(), completedSegmentIndex + 1, totalHubSegments);
+        // 마지막 세그먼트 전까지만 Hub Driver 배정
+        // 예: 3개 세그먼트면, segment 0, 1만 Hub Driver, segment 2 도착 후 Last Mile
+        boolean isLastHubSegmentCompleted = (completedCount >= totalHubSegments - 1);
 
-        if (nextSegmentIndex < totalHubSegments) {
-            // 다음 허브 구간 존재 → 다음 구간 드라이버 배정
-            log.info("다음 허브 구간 시작 - trackId: {}, nextSegment: {}/{}",
-                    track.getIdValue(), nextSegmentIndex + 1, totalHubSegments);
-            requestHubSegmentDriverAssignment(track, nextSegmentIndex);
-        } else {
-            // 모든 허브 구간 완료 → 최종 배송 시작
-            log.info("모든 허브 구간 완료, 최종 배송 시작 - trackId: {}",
-                    track.getIdValue());
+        if (isLastHubSegmentCompleted) {
+            log.info("마지막 허브 구간 완료, 최종 배송 시작 - trackId: {}", track.getIdValue());
             requestLastMileDriverAssignment(track);
+        } else {
+            log.info("다음 허브 구간 시작 - trackId: {}, nextSegment: {}",
+                    track.getIdValue(), completedCount);
+            requestHubSegmentDriverAssignment(track, completedCount);
         }
     }
 
